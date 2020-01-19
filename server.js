@@ -58,6 +58,6 @@ page_names.forEach((name) => {
 
 const PORT = (process.env.PORT | 3000)
 
-http.listen(PORT, "127.0.0.1", () => {
+http.listen(PORT, "::", () => {
     timed_log(`listening on port *: ${PORT}`)
 })
