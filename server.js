@@ -3,9 +3,11 @@ const fs = require("fs")
 
 const express = require("express")
 // const morgan = require("morgan")
+const helmet = require("helmet")
 let app = express()
 
 // app.use(morgan("tiny"))
+app.use(helmet())
 app.use(express.static(path.join(__dirname, "public")))
 app.set("views", path.join(__dirname, "views"))
 
@@ -59,6 +61,7 @@ page_names.forEach((name) => {
 })
 
 const PORT = (process.env.PORT | 3000)
-http.listen(PORT, () => {
+
+app.listen(PORT, () => {
     timed_log(`listening on port *: ${PORT}`)
 })
