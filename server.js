@@ -18,11 +18,7 @@ const socket = require("socket.io")
 var io = socket(http)
 
 const pages = {
-    "/": "test.pug",
-    "/new-game": "new-game.pug",
-    "/games": "games.pug",
-    "/game": "game.pug",
-    "/waiting": "waiting.pug"
+    "/": "test.pug"
 }
 const page_names = Object.keys(pages)
 
@@ -62,6 +58,6 @@ page_names.forEach((name) => {
 
 const PORT = (process.env.PORT | 3000)
 
-http.listen(PORT, "0.0.0.0", () => {
+http.listen(PORT, "127.0.0.1", () => {
     timed_log(`listening on port *: ${PORT}`)
 })
