@@ -26,6 +26,8 @@ const pages = {
 }
 const page_names = Object.keys(pages)
 
+let thing = express.Router()
+
 online = {}
 recent = {}
 
@@ -59,6 +61,12 @@ page_names.forEach((name) => {
         timed_log(`Opened: ${pages[name]}`)
     })
 })
+
+thing.get("/",(req,res) => {
+    res.send("respond with the thing")
+})
+
+app.use("/users",thing)
 
 const PORT = (process.env.PORT | 3000)
 
