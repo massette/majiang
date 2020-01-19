@@ -18,7 +18,7 @@ const socket = require("socket.io")
 var io = socket(http)
 
 const pages = {
-    "/": "test.pug"
+    "*": "test.pug"
 }
 const page_names = Object.keys(pages)
 
@@ -60,4 +60,5 @@ const PORT = (process.env.PORT | 3000)
 
 http.listen(PORT, "::", () => {
     timed_log(`listening on port *: ${PORT}`)
+    timed_log(`look at this stuff god its depressing`)
 })
