@@ -22,12 +22,7 @@ const pages = {
     "/game": "game.pug",
     "/waiting": "waiting.pug"
 }
-
 const page_names = Object.keys(pages)
-
-page_names.forEach((name,i) => {
-    app.get(name, (req,res) => res.render(pages[name], { "title": "Mahjong" }))
-})
 
 online = {}
 recent = {}
@@ -54,6 +49,14 @@ const ms = (_t) => {
 const timed_log = (_m) => {
     console.log(`[${ms()}] ${_m}`)
 }
+
+
+page_names.forEach((name) => {
+    app.get(name, (req,res) => {
+        res.render(pages[name], { "title": "Mahjong" })
+        timed_log(`Opened: ${pages[name]}`)
+    })
+})
 
 const PORT = (process.env.PORT | 3000)
 http.listen(PORT, () => {
