@@ -1,4 +1,4 @@
-const path = require("path")
+/*const path = require("path")
 const fs = require("fs")
 
 const express = require("express")
@@ -61,4 +61,16 @@ const PORT = (process.env.PORT | 3000)
 http.listen(PORT, "::", () => {
     timed_log(`listening on port *: ${PORT}`)
     timed_log(`look at this stuff god its depressing`)
+})*/
+
+app = require("express")()
+
+app.get("/", (req,res) => {
+    res.send("oh god")
+})
+
+const PORT = (process.env.PORT | 3000)
+
+app.listen(PORT, "::", () => {
+    console.log(`listening on port *: ${PORT}`)
 })
