@@ -1,0 +1,11 @@
+{
+    "name": "ma.jiang",
+    "version": "0.0.1",
+    "description": "at times like these we have no words; we have only each other",
+    "dependencies": {
+        "express": "^4.17.1",
+        "http": "0.0.0",
+        "morgan": "^1.9.1",
+        "socket.io": "^2.3.0"
+    }
+}
