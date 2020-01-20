@@ -11,8 +11,3 @@ soc.on("err:nick",() => {
     err.innerText = "Please try a different name"
     err.style.display = "block";
 })
-
-soc.on("err:nouser",() => {
-    err.innerText = "Invalid user"
-    err.style.display = "block";
-})

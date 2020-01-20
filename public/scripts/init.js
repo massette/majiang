@@ -2,6 +2,7 @@ soc = io()
 user = null
 
 const err = document.getElementById("err")
+const CHINESE = require("./chinese.json")
 
 const redirect = (path) => {
     if (path && path != window.location.href) {
@@ -10,7 +11,7 @@ const redirect = (path) => {
             soc.emit("update:user",user,() => { window.location.href = path })
         } else {
             setTimeout(redirect,10,path)
-            console.log("please don't show this")
+            console.log("redirecting...")
         }
     }
 }
@@ -44,6 +45,12 @@ soc.on("finalize:user",(u) => {
 
 soc.on("update:user",(u) => {
     user = u
+})
+
+
+soc.on("err:nouser",() => {
+    err.innerText = "Invalid user"
+    err.style.display = "block";
 })
 
 
