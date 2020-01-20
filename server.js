@@ -45,8 +45,19 @@ const ms = (_t) => {
     return `${_h}:${_m}:${_s}:${_t}`
 }
 
-const timed_log = (_m) => {
-    console.log(`[${ms()}] ${_m}`)
+const timed_log = (m) => {
+    console.log(`[${ms()}] ${m}`)
+}
+
+
+const check_sock = (soc) => {
+    if (online[soc.id]) return true
+
+    let _user = { "id": soc.id }
+
+    io.to(`${soc.id}`).emit("init:user",_user)
+
+    return false
 }
 
 
@@ -64,19 +75,44 @@ io.on("connection", (soc) => {
     io.to(`${soc.id}`).emit("init:user",_user)
 
     soc.on("set:id", (user,id) => {
-        if (user.rd && (user.rd != `/${_page}`)) soc.emit("redirect",user.rd)
-        else if (recent[id]) {
+        if (recent[id]) {
             user = recent[id]
             delete recent[id]
+            delete user.rd
+            user.id = soc.id
             online[soc.id] = user
-            online[soc.id].id = soc.id
-            timed_log(`retrieved user: ${id}...`)
+            timed_log(`retrieved user: #${id}...`)
             io.to(`${soc.id}`).emit("init:user",user)
         } else {
+            if (user.rd && (user.rd != `/${_page}`)) {
+                recent[soc.id] = user
+                soc.emit("redirect",user.rd)
+            }
             online[soc.id] = user
-            timed_log(`created user: ${soc.id}`)
+            timed_log(`created user: #${soc.id}`)
             io.to(`${soc.id}`).emit("finalize:user",user)
         }
+    })
+
+    soc.on("set:name", (n) => {
+        if (!check_sock(soc)) io.to(`${soc.id}`).emit("err:nouser")
+
+        if (n && n.trim().length) {
+            n = n.trim()
+
+            online[soc.id].name = n
+            timed_log(`[${soc.id}] set name: ${n}`)
+            io.to(`${soc.id}`).emit("update:user",online[soc.id])
+            io.to(`${soc.id}`).emit("redirect","/games")
+        } else {
+            timed_log(`[${soc.id}] invalid name: ${n}`)
+            io.to(`${soc.id}`).emit("err:nick")
+        }
+    })
+
+    soc.on("update:user",(u,then) => {
+        online[soc.id] = u
+        if (then) then()
     })
 
     soc.on("disconnect",() => {
@@ -89,6 +125,10 @@ io.on("connection", (soc) => {
         } else {
             timed_log(`user disconnected: #${soc.id}`)
         }
+    })
+
+    soc.on("put",(m) => {
+        timed_log(`[${soc.id}] ${m}`)
     })
 })
 

@@ -92,7 +92,9 @@ body {
     text-transform: uppercase;
 }
 
-#invalid-nick {
+#err {
+    display: none;
+
     background: var(--color-main);
     color: var(--color-bg);
 

@@ -8,8 +8,10 @@ body
   form#in(action="")
     input#nick(type="text",placeholder="Nickname",autocomplete="off")
     button#submit start
+
+  #err.
   
   script(src="/socket.io/socket.io.js")
-  
+
   script(src="scripts/init.js")
   script(src="scripts/new-user.js")
