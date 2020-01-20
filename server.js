@@ -19,7 +19,8 @@ var io = socket(http)
 
 const pages = {
     "/": "new-user.pug",
-    "/games": "game-list.pug"
+    "/games": "game-list.pug",
+    "/new-game": "new-game.pug"
 }
 const page_names = Object.keys(pages)
 
@@ -111,6 +112,48 @@ io.on("connection", (soc) => {
         } else {
             timed_log(`[${soc.id}] invalid name: ${n}`)
             io.to(`${soc.id}`).emit("err:nick")
+        }
+    })
+
+    soc.on("add:group",(g) => {
+        if (!check_sock(soc)) io.to(`${soc.id}`).emit("err:nouser")
+        _gs = groups.filter((v,i) => (groups[i].name == g.trim()))
+
+        if (g && g.trim().length && !(_gs.length)) { 
+            g = { "name": g.trim(), "members": [] }
+
+            groups.push(g)
+            
+            timed_log(`[${soc.id}] created group: ${g.name}`)
+            io.emit("update:groups")
+            io.to(`${soc.id}`).emit("redirect","/games")
+        } else {
+            timed_log(`[${soc.id}] invalid name: ${g}`)
+            io.to(`${soc.id}`).emit("err:groupname")
+        }
+    })
+
+    soc.on("join:group", (g) => {
+        let _g = groups.map((v,i) => (i))
+        _g = _g.filter((v,i) => (groups[i].name == g))
+
+        if (_g.length) {
+            _g = _g[0]
+
+            if (online[soc.id]) {
+                online[soc.id].in = groups[_g].name
+                soc.emit("update:user",online[soc.id],"/waiting")
+
+                groups[_g].members.push(online[soc.id])
+                soc.broadcast.emit("update:groups",groups)
+            }
+
+            soc.join(groups[_g].name)
+            io.to(g).emit("update:group",groups[_g])
+
+            timed_log(`[${soc.id}] joined: ${groups[_g].name}`)
+        } else {
+            timed_log(`[${soc.id}] tried to join non-existant group`)
         }
     })
 

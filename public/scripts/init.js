@@ -29,7 +29,7 @@ const redirect = (path) => {
 soc.on("init:user",(u) => {
     _rd = null
     if (!u.name) { _rd = "/" }
-    else if (!u.in) { _rd = "/games" }
+    else if (!u.in && window.location.href.split("/").pop() != "new-game") { _rd = "/games" }
     else if (u.playing) { _rd = "/game" }
     
     _user = u
@@ -53,8 +53,13 @@ soc.on("finalize:user",(u) => {
     else { console.log(`connected as new user!`) }
 })
 
-soc.on("update:user",(u) => {
+soc.on("update:user",(u,rd) => {
     user = u
+    if (rd) redirect(rd)
+})
+
+soc.on("join:group",(g) => {
+
 })
 
 

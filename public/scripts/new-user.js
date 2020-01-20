@@ -1,6 +1,5 @@
 const nick_form = document.getElementById("in")
 const nick = document.getElementById("nick")
-const invalid = document.getElementById("invalid-nick")
 
 nick_form.onsubmit = (e) => {
     e.preventDefault()

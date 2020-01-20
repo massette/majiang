@@ -1,0 +1,17 @@
+doctype html
+
+head
+  title= title
+  link(rel="stylesheet", type="text/css", href="style.css")
+body
+  div#head 麻将
+  form#in(action="")
+    input#group(type="text",placeholder="Group Name",autocomplete="off")
+    button#submit create
+
+  #err.
+  
+  script(src="/socket.io/socket.io.js")
+
+  script(src="scripts/init.js")
+  script(src="scripts/new-game.js")

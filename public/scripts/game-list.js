@@ -12,7 +12,8 @@ const add_group = (g) => {
 
     let desc = document.createElement("div")
     desc.className = "desc"
-    desc.innerHTML = `<b>${CHINESE["east"]}:</b> ${g.members[0].name}<span style="margin-right: 16vh;"></span>${CHINESE[g.members.length]} / ${CHINESE[4]} <b>Players</b>`
+    if (g.members.length) desc.innerHTML = `<b>${CHINESE["east"]}:</b> ${g.members[0].name}<span style="margin-right: 16vh;"></span>${CHINESE[g.members.length]} / ${CHINESE[4]} <b>Players</b>`
+    else { desc.innerHTML = `<b>${CHINESE["east"]}:</b> ...<span style="margin-right: 16vh;"></span>〇 / ${CHINESE[4]} <b>Players</b>` }
     new_g.appendChild(desc)
 
     let button = document.createElement("button")
