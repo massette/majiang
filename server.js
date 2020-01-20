@@ -53,11 +53,46 @@ const timed_log = (_m) => {
 page_names.forEach((name) => {
     app.get(name, (req,res) => {
         res.render(pages[name], { "title": "Mahjong" })
-        timed_log(`Opened: ${pages[name]}`)
+        timed_log(`retrieved: ${pages[name]}`)
     })
 })
 
-const PORT = (process.env.PORT || 3000)
+io.on("connection", (soc) => {
+    let _user = { "id": soc.id }
+    let _page = soc.handshake.headers.referer.split("/").pop()
+
+    io.to(`${soc.id}`).emit("init:user",_user)
+
+    soc.on("set:id", (user,id) => {
+        if (user.rd && (user.rd != `/${_page}`)) soc.emit("redirect",user.rd)
+        else if (recent[id]) {
+            user = recent[id]
+            delete recent[id]
+            online[soc.id] = user
+            online[soc.id].id = soc.id
+            timed_log(`retrieved user: ${id}...`)
+            io.to(`${soc.id}`).emit("init:user",user)
+        } else {
+            online[soc.id] = user
+            timed_log(`created user: ${soc.id}`)
+            io.to(`${soc.id}`).emit("finalize:user",user)
+        }
+    })
+
+    soc.on("disconnect",() => {
+        if (online[soc.id]) {
+            if (online[soc.id].name) timed_log(`user disconnected: #${soc.id} (${online[soc.id].name})`)
+            else { timed_log(`user disconnected: #${soc.id}`) }
+
+            recent[soc.id] = online[soc.id]
+            delete online[soc.id]
+        } else {
+            timed_log(`user disconnected: #${soc.id}`)
+        }
+    })
+})
+
+const PORT = (process.env.PORT || 8080)
 
 http.listen(PORT, "::", () => {
     timed_log(`listening on port *: ${PORT}`)

@@ -1,21 +1,26 @@
 soc = io()
 user = null
 
-soc.on("init",(u) => {
+soc.on("init:user",(u) => {
     _rd = null
-    if (!user.name) { _rd = "/" }
-    if (!user.in) { _rd = "/games" }
-    if (user.playing) { _rd = "/game" }
+    if (!u.name) { _rd = "/" }
+    else if (!u.in) { _rd = "/games" }
+    else if (u.playing) { _rd = "/game" }
+    
+    _user = u
+    _user["rd"] = _rd
 
-    _id = null
-    if (localStorage.getItem("id")) {
-        _id = localStorage.getItem("id")
+    _id = u.id
+    if (localStorage.getItem("id")) _id = localStorage.getItem("id")
 
-        soc.emit("user:update:id",_id)
-    } else {
-        user = u
+    soc.emit("set:id",_user,_id)
+})
 
-        if (user.name) console.log(`connected as ${user.name}!`)
-        else { console.log(`connected as new user!`) }
-    }
+soc.on("finalize:user",(u) => {
+    user = u
+
+    localStorage.setItem("id",u.id)
+
+    if (user.name) console.log(`connected as ${user.name}!`)
+    else { console.log(`connected as new user!`) }
 })
