@@ -92,6 +92,88 @@ body {
     text-transform: uppercase;
 }
 
+
+.group {
+    font-family: "Josefin Sans";
+
+    position: relative;
+
+    border: 5px solid var(--color-main);
+
+    margin: 2vh;
+}
+
+.group .label {
+    background: var(--color-main);
+    color: var(--color-bg);
+
+    font-weight: bold;
+    font-size: 3vh;
+
+    margin: 0;
+    padding: 1vh;
+}
+
+.group .desc {
+    font-size: 3.5vmin;
+
+    color: var(--color-main);
+
+    padding: 1vh;
+    padding-bottom: calc(7vh + 0.8em);
+}
+
+.group button {
+    font-size: 3vh;
+    
+    position: absolute;
+    left: 0.4em;
+    bottom: 0.4em;
+
+    width: calc(100% - 0.8em);
+    height: calc(3vh + 1.2em);
+
+    padding: calc(0.6em - 2.5px);
+
+    background: var(--color-main);
+    color: var(--color-bg);
+    border: none;
+
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.group button.disabled {
+    background: var(--color-bg);
+    border: 5px solid var(--color-light);
+    color: var(--color-light);
+}
+
+button#new-game {
+    display: block;
+
+    width: calc(100% - 4vh);
+
+    background: var(--color-main);
+    color: var(--color-bg);
+    border: 5px solid var(--color-main);
+
+    font-family: "Josefin Sans";
+    font-weight: bold;
+    font-size: 4vh;
+
+    text-transform: uppercase;
+
+    position: relative;
+
+    border: 5px solid var(--color-main);
+
+    margin: 2vh;
+    margin-bottom: 6vh;
+    padding: 1vh;
+}
+
+
 #err {
     display: none;
 

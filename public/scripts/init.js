@@ -2,7 +2,17 @@ soc = io()
 user = null
 
 const err = document.getElementById("err")
-const CHINESE = require("./chinese.json")
+const CHINESE = {
+    1: "一",
+    2: "二",
+    3: "三",
+    4: "四",
+    
+    "east": "东",
+    "south": "南",
+    "west": "西",
+    "north": "北"
+  }
 
 const redirect = (path) => {
     if (path && path != window.location.href) {

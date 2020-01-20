@@ -26,7 +26,9 @@ const page_names = Object.keys(pages)
 online = {}
 recent = {}
 
-boards = []
+groups = [
+    { "name": "JR", "members": [{"name": "Jaune Arc"},{"name": "Lie Ren"}] }
+]
 
 started_at = Date.now()
 
@@ -73,6 +75,8 @@ io.on("connection", (soc) => {
     let _page = soc.handshake.headers.referer.split("/").pop()
 
     io.to(`${soc.id}`).emit("init:user",_user)
+
+    if (_page == "games") io.to(`${soc.id}`).emit("update:groups",groups)
 
     soc.on("set:id", (user,id) => {
         if (recent[id]) {
@@ -126,6 +130,7 @@ io.on("connection", (soc) => {
             timed_log(`user disconnected: #${soc.id}`)
         }
     })
+
 
     soc.on("put",(m) => {
         timed_log(`[${soc.id}] ${m}`)
