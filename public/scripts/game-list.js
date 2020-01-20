@@ -26,8 +26,7 @@ const add_group = (g) => {
 }
 
 soc.on("update:groups",(gs) => {
-    var _groups = document.getElementsByClassName("game")
-    while (_groups[0]) _groups[0].parentNode.removeChild(_groups[0])
+    while (groups_container.firstChild) groups_container.removeChild(groups_container.firstChild)
 
     gs.forEach(add_group)
 })
