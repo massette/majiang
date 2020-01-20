@@ -87,7 +87,7 @@ io.on("connection", (soc) => {
             user.id = soc.id
             online[soc.id] = user
             timed_log(`retrieved user: #${id}...`)
-            io.to(`${soc.id}`).emit("init:user",user)
+            soc.emit("init:user",user)
         } else {
             if (user.rd && (user.rd != `/${_page}`)) {
                 recent[soc.id] = user
@@ -95,7 +95,7 @@ io.on("connection", (soc) => {
             }
             online[soc.id] = user
             timed_log(`created user: #${soc.id}`)
-            io.to(`${soc.id}`).emit("finalize:user",user)
+            soc.emit("finalize:user",user)
         }
     })
 
@@ -107,11 +107,11 @@ io.on("connection", (soc) => {
 
             online[soc.id].name = n
             timed_log(`[${soc.id}] set name: ${n}`)
-            io.to(`${soc.id}`).emit("update:user",online[soc.id])
-            io.to(`${soc.id}`).emit("redirect","/games")
+            soc.emit("update:user",online[soc.id])
+            soc.emit("redirect","/games")
         } else {
             timed_log(`[${soc.id}] invalid name: ${n}`)
-            io.to(`${soc.id}`).emit("err:nick")
+            soc.emit("err:nick")
         }
     })
 
@@ -125,8 +125,8 @@ io.on("connection", (soc) => {
             groups.push(g)
             
             timed_log(`[${soc.id}] created group: ${g.name}`)
-            io.emit("update:groups")
-            io.to(`${soc.id}`).emit("redirect","/games")
+            soc.broadcast.emit("update:groups",groups)
+            soc.emit("echo","join:group",g.name)
         } else {
             timed_log(`[${soc.id}] invalid name: ${g}`)
             io.to(`${soc.id}`).emit("err:groupname")

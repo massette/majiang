@@ -63,6 +63,11 @@ soc.on("join:group",(g) => {
 })
 
 
+soc.on("echo",(message,args) => {
+    soc.emit(message,args)
+})
+
+
 soc.on("err:nouser",() => {
     err.innerText = "Invalid user"
     err.style.display = "block";
