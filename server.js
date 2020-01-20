@@ -1,4 +1,4 @@
-/*const path = require("path")
+const path = require("path")
 const fs = require("fs")
 
 const express = require("express")
@@ -18,7 +18,8 @@ const socket = require("socket.io")
 var io = socket(http)
 
 const pages = {
-    "*": "test.pug"
+    "/": "new-user.pug",
+    "/games": "game-list.pug"
 }
 const page_names = Object.keys(pages)
 
@@ -56,21 +57,8 @@ page_names.forEach((name) => {
     })
 })
 
-const PORT = (process.env.PORT | 3000)
+const PORT = (process.env.PORT || 3000)
 
 http.listen(PORT, "::", () => {
     timed_log(`listening on port *: ${PORT}`)
-    timed_log(`look at this stuff god its depressing`)
-})*/
-
-app = require("express")()
-
-app.get("/", (req,res) => {
-    res.send("testing")
-})
-
-const PORT = (process.env.PORT || 8080)
-
-app.listen(PORT, "0.0.0.0", () => {
-    console.log(`listening on port *: ${PORT}`)
 })

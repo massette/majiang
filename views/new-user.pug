@@ -1,0 +1,15 @@
+doctype html
+
+head
+  title= title
+  link(rel="stylesheet", type="text/css", href="style.css")
+body
+  div#head 麻将
+  form#in(action="")
+    input#nick(type="text",placeholder="Nickname",autocomplete="off")
+    button#submit start
+  
+  script(src="/socket.io/socket.io.js")
+  
+  script(src="scripts/init.js")
+  script(src="scripts/new-user.js")
