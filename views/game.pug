@@ -1,0 +1,25 @@
+doctype html
+
+head
+    title= title
+    link(rel="stylesheet", type="text/css", href="style.css")
+body
+    div#head 麻将
+
+    #game
+        #instructions.
+        #discard.block.disabled No discard
+        #pickup.block.small.disabled pick up
+        #draw.block.small.disabled draw
+
+        #hand
+        #bonus
+
+        #selected.block.disabled Nothing selected
+        #meld.block.small.disabled meld
+        #melds
+
+    script(src="/socket.io/socket.io.js")
+    
+    script(src="/scripts/init.js")
+    script(src="/scripts/game.js")

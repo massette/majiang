@@ -17,6 +17,22 @@ let http = HTTP.createServer(app)
 const socket = require("socket.io")
 var io = socket(http)
 
+const shuffle = (arr) => {
+    let len = arr.length
+    let rand, temp
+
+    while (len != 0) {
+        rand = Math.floor(Math.random() * len)
+        len -= 1
+
+        temp = arr[len]
+        arr[len] = arr[rand]
+        arr[rand] = temp
+    }
+
+    return arr
+}
+
 const createDeck = () => {
     _dck = []
   
@@ -89,6 +105,7 @@ const pages = {
     "/games": "game-list.pug",
     "/new-game": "new-game.pug",
     "/waiting": "waiting.pug",
+    "/game": "game.pug",
     "*": "404.pug"
 }
 const page_names = Object.keys(pages)
@@ -160,6 +177,15 @@ io.on("connection", (soc) => {
         } else {
             timed_log(`[${soc.id}] not in group`)
         }
+    })
+
+    soc.on("request:setup",() => {
+        soc.emit("setup",online[soc.id].in)
+
+        _g = groups.map((v,i) => (i))
+        _g = _g.filter((v,i) => (groups[v].name == online[soc.id].in))
+
+        if (_g.length) groups[_g[0]].playing = 0
     })
 
     soc.on("set:id", (user,id) => {
@@ -286,9 +312,32 @@ io.on("connection", (soc) => {
         }
     })
 
+    soc.on("start:game",(g) => {
+        _g = groups.map((v,i) => (i))
+        _g = _g.filter((v,i) => (groups[i].name == g))
+
+        if (_g.length) {
+            io.to(g).emit("start:game")
+            groups[_g[0]].deck = shuffle(DECK.slice(0))
+        }
+    })
+
     soc.on("update:user",(u,then) => {
         online[soc.id] = u
         if (then) then()
+    })
+
+    soc.on("draw",(i) => {
+        arr = []
+        _g = groups.map((v,i) => (i))
+        _g = _g.filter((v,i) => (groups[i].name == online[soc.id].in))
+
+        while (i) {
+            arr.push(groups[_g].deck.shift())
+            i -= 1
+        }
+
+        soc.emit("add:cards",arr)
     })
 
     soc.on("disconnect",() => {

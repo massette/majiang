@@ -23,8 +23,9 @@ soc.on("update:group",(group) => {
 
     let _start = document.createElement("div")
     _start.className = "small block"
-    if (group.members.length < 4) _start.className = "small block disabled"
+    if (group.members.length < 2) _start.className = "small block disabled"
     _start.innerText = "Start"
+    _start.onclick = () => { soc.emit("start:game",group.name) }
     _buttons.appendChild(_start)
 
     disp.appendChild(_buttons)
@@ -42,4 +43,9 @@ soc.on("update:group",(group) => {
     })
 
     disp.appendChild(users)
+})
+
+soc.on("start:game",() => {
+    user.playing = true
+    soc.emit("update:user",user,() => { redirect("/game") })
 })

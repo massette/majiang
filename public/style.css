@@ -240,7 +240,64 @@ button#new-game {
     border-bottom: 1vh solid #fd7;
 }
 
-#waiting .block {
+#discard {
+    text-align: center;
+
+    margin: 0.5vw;
+    padding: calc(1vw - 0.5vh);
+    padding-top: 1vh;
+    padding-bottom: 1vh;
+
+    background: var(--color-bg);
+    color: var(--color-main);
+    border: 0.5vh solid var(--color-main);
+
+    width: calc(50% - 3vw);
+}
+
+#selected {
+    text-align: center;
+
+    margin: 0.5vw;
+    padding: calc(1vw - 0.5vh);
+    padding-top: 1vh;
+    padding-bottom: 1vh;
+
+    background: var(--color-bg);
+    color: var(--color-main);
+    border: 0.5vh solid var(--color-main);
+
+    width: calc(50% - 3vw);
+}
+
+#selected.disabled {
+    color: var(--color-light);
+    border-color: var(--color-light);
+}
+
+#discard.disabled {
+    color: var(--color-light);
+    border-color: var(--color-light);
+}
+
+#pickup {
+    width: calc(20% - 3vw);
+}
+
+#meld {
+    width: calc(20% - 3vw);
+}
+
+#draw {
+    width: calc(20% - 3vw);
+}
+
+#hand {
+    margin-top: 3vh;
+    margin-bottom: 2vh;
+}
+
+.block {
     display: inline-block;
 
     font-size: 3vh;
@@ -264,12 +321,12 @@ button#new-game {
     transition: background-color ease 1s;
 }
 
-#waiting .block.small {
+.block.small {
     width: calc(20vh - 3vh);
     text-align: center;
 }
 
-#waiting .block.disabled {
+.block.disabled {
     background: var(--color-bg);
     color: var(--color-light);
 
