@@ -340,7 +340,7 @@ io.on("connection", (soc) => {
 
         if (moveon) {
             groups[_g].playing = groups[_g].playing % 4
-            soc.emit("check:turns")
+            io.to(groups[_g].in).emit("check:turns",groups[_g])
         }
 
         soc.emit("add:cards",arr)

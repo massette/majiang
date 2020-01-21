@@ -3,6 +3,8 @@ tiles = document.getElementById("hand")
 
 const update_tiles = () => {
     while (tiles.firstChild) tiles.removeChild(tiles.firstChild)
+    while (bonuses.firstChild) bonuses.removeChild(bonuses.firstChild)
+
     if (user.hand) {
         user.hand.forEach((v,i) => {
             let tile = new Image()
@@ -21,8 +23,6 @@ const update_tiles = () => {
 
 const check_turns = (g) => {
     _draw = document.getElementById("draw")
-
-    console.log("is this defeat")
 
     if (g.members[g.playing].id == soc.id) {
         _draw.className = "block small"
