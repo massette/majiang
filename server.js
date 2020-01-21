@@ -180,12 +180,13 @@ io.on("connection", (soc) => {
     })
 
     soc.on("request:setup",() => {
-        soc.emit("setup",online[soc.id].in)
-
         _g = groups.map((v,i) => (i))
         _g = _g.filter((v,i) => (groups[v].name == online[soc.id].in))
 
-        if (_g.length) groups[_g[0]].playing = 0
+        if (_g.length) {
+            groups[_g[0]].playing = 0
+            soc.emit("setup",groups[_g[0]])
+        }
     })
 
     soc.on("set:id", (user,id) => {
@@ -327,7 +328,7 @@ io.on("connection", (soc) => {
         if (then) then()
     })
 
-    soc.on("draw",(i) => {
+    soc.on("draw",(i,moveon) => {
         arr = []
         _g = groups.map((v,i) => (i))
         _g = _g.filter((v,i) => (groups[i].name == online[soc.id].in))
@@ -335,6 +336,11 @@ io.on("connection", (soc) => {
         while (i) {
             arr.push(groups[_g].deck.shift())
             i -= 1
+        }
+
+        if (moveon) {
+            groups[_g].playing = groups[_g].playing % 4
+            soc.emit("check:turns")
         }
 
         soc.emit("add:cards",arr)
