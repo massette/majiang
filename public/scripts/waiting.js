@@ -18,6 +18,7 @@ soc.on("update:group",(group) => {
     let _leave = document.createElement("div")
     _leave.className = "small block"
     _leave.innerText = "Leave"
+    _leave.onclick = () => {soc.emit("leave:group")}
     _buttons.appendChild(_leave)
 
     let _start = document.createElement("div")

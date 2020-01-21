@@ -17,6 +17,73 @@ let http = HTTP.createServer(app)
 const socket = require("socket.io")
 var io = socket(http)
 
+const createDeck = () => {
+    _dck = []
+  
+    // simples: dots
+    _dck.push("1d")
+    _dck.push("2d")
+    _dck.push("3d")
+    _dck.push("4d")
+    _dck.push("5d")
+    _dck.push("6d")
+    _dck.push("7d")
+    _dck.push("8d")
+    _dck.push("9d")
+  
+    // simples: bamboo
+    _dck.push("1b")
+    _dck.push("2b")
+    _dck.push("3b")
+    _dck.push("4b")
+    _dck.push("5b")
+    _dck.push("6b")
+    _dck.push("7b")
+    _dck.push("8b")
+    _dck.push("9b")
+  
+    // simples: characters
+    _dck.push("1c")
+    _dck.push("2c")
+    _dck.push("3c")
+    _dck.push("4c")
+    _dck.push("5c")
+    _dck.push("6c")
+    _dck.push("7c")
+    _dck.push("8c")
+    _dck.push("9c")
+  
+    // honours: dragons
+    _dck.push("rdr") // zhong (中)
+    _dck.push("gdr") // fa (發)
+    _dck.push("wdr")
+  
+    // honours: winds
+    _dck.push("east") // dong (东)
+    _dck.push("south") // nan (南)
+    _dck.push("west") // xi (西)
+    _dck.push("north") // bei (北)
+  
+    _dck = _dck.concat(_dck)
+    _dck = _dck.concat(_dck)
+  
+    // bonus: flowers
+    _dck.push("f1-bonus")
+    _dck.push("f2-bonus")
+    _dck.push("f3-bonus")
+    _dck.push("f4-bonus")
+  
+    // bonus: seasons
+    _dck.push("s1-bonus")
+    _dck.push("s2-bonus")
+    _dck.push("s3-bonus")
+    _dck.push("s4-bonus")
+  
+    return _dck
+}
+
+const DECK = createDeck()
+
 const pages = {
     "/": "new-user.pug",
     "/games": "game-list.pug",
@@ -102,6 +169,19 @@ io.on("connection", (soc) => {
             delete user.rd
             user.id = soc.id
             online[soc.id] = user
+
+            _gs = groups.map((v,i) => (i))
+            _g = _gs.filter((v,i) => (groups[i].name == online[soc.id].in))
+            if (_g.length) {
+                _g = _g[0]
+
+                _mi = groups[_g].members.map((v,i) => (i))
+                _mi = _mi.filter((v,i) => (groups[_g].members[i].id == id))
+
+                if (_mi.length) {
+                    groups[_g].members[_mi[0]] = user
+                }
+            }
             if (online[soc.id].in) soc.join(online[soc.id].in)
 
             timed_log(`retrieved user: #${id}...`)
@@ -178,12 +258,28 @@ io.on("connection", (soc) => {
     soc.on("leave:group", () => {
         if (!online[soc.id].in) timed_log(`[${soc.id}] not in a group`)
         else {
-            _g = groups.filters((v,i) => (v.name == online[soc.id].in))
+            _g = groups.map((v,i) => (i))
+            _g = _g.filter((v,i) => (groups[i].name == online[soc.id].in))
             if (_g.length) {
                 _g = _g[0]
-            } else {
+
+                _mi = groups[_g].members.map((v,i) => (i))
+                _mi = _mi.filter((v,i) => (groups[_g].members[i].id == soc.id))
+
+                _mi.forEach((v,i) => { groups[_g].members.splice(v,1) })
+                timed_log(`[${soc.id}] left group: ${online[soc.id].in}`)
+                if (!groups[_g].members.length) {
+                    timed_log(`deleted empty group: ${groups[_g].name}`)
+                    groups.splice(_g,1)
+                }
+
                 delete online[soc.id].in
-                timed_log(`[${soc.id}] invalid group`)
+                soc.emit("update:user",online[soc.id])
+                if (groups[_g]) io.to(groups[_g].name).emit("update:group",groups[_g])
+                soc.emit("redirect","/games")
+            } else {
+                timed_log(`[${soc.id}] invalid group: ${online[soc.id].in}`)
+                delete online[soc.id].in
                 soc.emit("update:user",online[soc.id])
             }
 

@@ -257,6 +257,9 @@ button#new-game {
     width: calc(50% - 3vh);
 
     text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 
     transition: background-color ease 1s;
 }
