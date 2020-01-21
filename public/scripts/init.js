@@ -8,10 +8,10 @@ const CHINESE = {
     3: "三",
     4: "四",
     
-    "east": "东",
-    "south": "南",
-    "west": "西",
-    "north": "北"
+    "1d": "东",
+    "2d": "南",
+    "3d": "西",
+    "4d": "北"
   }
 
 const redirect = (path) => {
@@ -27,11 +27,16 @@ const redirect = (path) => {
 }
 
 soc.on("init:user",(u) => {
+    _page = window.location.href.split("/").pop()
     _rd = null
     if (!u.name) { _rd = "/" }
-    else if (!u.in && window.location.href.split("/").pop() != "new-game") { _rd = "/games" }
+    else if (!u.in && _page != "new-game") { _rd = "/games" }
+    else if (u.in && !(_page == "waiting" || _page == "game")) { _rd = "/waiting" }
     else if (u.playing) { _rd = "/game" }
+    else if (!u.playing && _page == "game") { _rd = "/waiting" }
     
+    if (u.in) soc.emit("request:group")
+
     _user = u
     _user.rd = _rd
 

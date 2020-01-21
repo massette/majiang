@@ -20,16 +20,16 @@ var io = socket(http)
 const pages = {
     "/": "new-user.pug",
     "/games": "game-list.pug",
-    "/new-game": "new-game.pug"
+    "/new-game": "new-game.pug",
+    "/waiting": "waiting.pug",
+    "*": "404.pug"
 }
 const page_names = Object.keys(pages)
 
 online = {}
 recent = {}
 
-groups = [
-    { "name": "JR", "members": [{"name": "Jaune Arc"},{"name": "Lie Ren"}] }
-]
+groups = []
 
 started_at = Date.now()
 
@@ -79,6 +79,22 @@ io.on("connection", (soc) => {
 
     if (_page == "games") io.to(`${soc.id}`).emit("update:groups",groups)
 
+    soc.on("request:group",() => {
+        if (online[soc.id].in) {
+            g = groups.filter((v,i) => (v.name == online[soc.id].in))
+            if (g.length) {
+                soc.emit("update:group",g[0])
+                timed_log(`[${soc.id}] updated group`)
+            } else {
+                delete online[soc.id].in
+                soc.emit("update:user",online[soc.id])
+                timed_log(`[${soc.id}] invalid group`)
+            }
+        } else {
+            timed_log(`[${soc.id}] not in group`)
+        }
+    })
+
     soc.on("set:id", (user,id) => {
         if (recent[id]) {
             user = recent[id]
@@ -86,6 +102,8 @@ io.on("connection", (soc) => {
             delete user.rd
             user.id = soc.id
             online[soc.id] = user
+            if (online[soc.id].in) soc.join(online[soc.id].in)
+
             timed_log(`retrieved user: #${id}...`)
             soc.emit("init:user",user)
         } else {
@@ -154,6 +172,21 @@ io.on("connection", (soc) => {
             timed_log(`[${soc.id}] joined: ${groups[_g].name}`)
         } else {
             timed_log(`[${soc.id}] tried to join non-existant group`)
+        }
+    })
+
+    soc.on("leave:group", () => {
+        if (!online[soc.id].in) timed_log(`[${soc.id}] not in a group`)
+        else {
+            _g = groups.filters((v,i) => (v.name == online[soc.id].in))
+            if (_g.length) {
+                _g = _g[0]
+            } else {
+                delete online[soc.id].in
+                timed_log(`[${soc.id}] invalid group`)
+                soc.emit("update:user",online[soc.id])
+            }
+
         }
     })
 
