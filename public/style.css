@@ -11,6 +11,16 @@ body {
     text-align: center;
 }
 
+
+#back-text {
+    font-size: 80vmin;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    color: var(--color-light);
+    z-index: -99;
+}
 #not-found {
     background: var(--color-main);
     color: var(--color-bg);
@@ -252,7 +262,7 @@ button#new-game {
     color: var(--color-main);
     border: 0.5vh solid var(--color-main);
 
-    width: calc(50% - 3vw);
+    width: calc(2.5em + 1vw);
 }
 
 #selected {
@@ -271,24 +281,38 @@ button#new-game {
 }
 
 #selected.disabled {
+    background: none;
     color: var(--color-light);
     border-color: var(--color-light);
 }
 
 #discard.disabled {
+    background: none;
     color: var(--color-light);
     border-color: var(--color-light);
 }
 
 #pickup {
+    text-transform: uppercase;
+    margin: 0.5vw;
     width: calc(20% - 3vw);
 }
 
 #meld {
+    text-transform: uppercase;
+    margin: 0.5vw;
+    width: calc(20% - 3vw);
+}
+
+#discard-tile {
+    text-transform: uppercase;
+    margin: 0.5vw;
     width: calc(20% - 3vw);
 }
 
 #draw {
+    text-transform: uppercase;
+    margin: 0.5vw;
     width: calc(20% - 3vw);
 }
 
@@ -313,6 +337,8 @@ button#new-game {
 
     width: calc(50% - 3vh);
 
+    font-family: "Josefin Sans";
+
     text-align: left;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -327,7 +353,7 @@ button#new-game {
 }
 
 .block.disabled {
-    background: var(--color-bg);
+    background: none;
     color: var(--color-light);
 
     padding: 0.5vh;
@@ -335,6 +361,18 @@ button#new-game {
     padding-bottom: 1vh;
 
     border: 0.5vh solid var(--color-light)
+}
+
+img {
+    margin-right: 0.5vh;
+}
+
+#selected img {
+    height: 2em;
+}
+
+#discard img {
+    width: 2.5em;
 }
 
 

@@ -47,5 +47,6 @@ soc.on("update:group",(group) => {
 
 soc.on("start:game",() => {
     user.playing = true
+    if (user.hand) delete user.hand
     soc.emit("update:user",user,() => { redirect("/game") })
 })

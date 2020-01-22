@@ -32,7 +32,7 @@ soc.on("init:user",(u) => {
     if (!u.name) { _rd = "/" }
     else if (!u.in && _page != "new-game") { _rd = "/games" }
     else if (u.in && !(_page == "waiting" || _page == "game")) { _rd = "/waiting" }
-    else if (u.playing) { _rd = "/game" }
+    else if (u.playing) _rd = "/game"
     else if (!u.playing && _page == "game") { _rd = "/waiting" }
     
     if (u.in) soc.emit("request:group")

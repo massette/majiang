@@ -6,10 +6,11 @@ head
 body
     div#head 麻将
 
+    #back-text.
+
     #game
         #instructions.
         #discard.block.disabled No discard
-        #pickup.block.small.disabled pick up
         #draw.block.small.disabled draw
 
         #hand
@@ -17,6 +18,7 @@ body
 
         #selected.block.disabled Nothing selected
         #meld.block.small.disabled meld
+        #discard-tile.block.small.disabled discard
         #melds
 
     script(src="/socket.io/socket.io.js")

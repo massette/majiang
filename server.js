@@ -210,6 +210,7 @@ io.on("connection", (soc) => {
                 }
             }
             if (online[soc.id].in) soc.join(online[soc.id].in)
+            else if (online[soc.id].playing) delete online[soc.id].playing
 
             timed_log(`retrieved user: #${id}...`)
             soc.emit("init:user",user)
@@ -328,22 +329,37 @@ io.on("connection", (soc) => {
         if (then) then()
     })
 
-    soc.on("draw",(i,moveon) => {
+    soc.on("draw",(i) => {
         arr = []
         _g = groups.map((v,i) => (i))
         _g = _g.filter((v,i) => (groups[i].name == online[soc.id].in))
 
-        while (i) {
-            arr.push(groups[_g].deck.shift())
-            i -= 1
-        }
+        if (_g.length) {
+            _g = _g[0]
 
-        if (moveon) {
-            groups[_g].playing = groups[_g].playing % 4
-            io.to(groups[_g].in).emit("check:turns",groups[_g])
-        }
+            while (i) {
+                arr.push(groups[_g].deck.shift())
+                i -= 1
+            }
 
-        soc.emit("add:cards",arr)
+            soc.emit("add:cards",arr)
+            soc.emit("setup",groups[_g])
+        }
+    })
+
+    soc.on("next:turn",(disc) => {
+        _g = groups.map((v,i) => (i))
+        _g = _g.filter((v,i) => (groups[i].name == online[soc.id].in))
+        groups[_g].playing = (groups[_g].playing + 1) % groups[_g].members.length
+        if (disc) groups[_g].last_discard = disc
+        io.to(groups[_g].name).emit("setup",groups[_g])
+    })
+
+    soc.on("delete:lastcard",() => {
+        _g = groups.map((v,i) => (i))
+        _g = _g.filter((v,i) => (groups[i].name == online[soc.id].in))
+        delete groups[_g].last_discard
+        io.to(groups[_g].name).emit("setup",groups[_g])
     })
 
     soc.on("disconnect",() => {
@@ -362,6 +378,8 @@ io.on("connection", (soc) => {
     soc.on("put",(m) => {
         timed_log(`[${soc.id}] ${m}`)
     })
+
+    soc.on("echo",(m,arg) => (soc.emit(m,arg)))
 })
 
 const PORT = (process.env.PORT || 8080)
