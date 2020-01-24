@@ -179,16 +179,6 @@ io.on("connection", (soc) => {
         }
     })
 
-    soc.on("request:setup",() => {
-        _g = groups.map((v,i) => (i))
-        _g = _g.filter((v,i) => (groups[v].name == online[soc.id].in))
-
-        if (_g.length) {
-            groups[_g[0]].playing = 0
-            soc.emit("setup",groups[_g[0]])
-        }
-    })
-
     soc.on("set:id", (user,id) => {
         if (recent[id]) {
             user = recent[id]
@@ -324,12 +314,22 @@ io.on("connection", (soc) => {
         }
     })
 
+    soc.on("update:game",(g) => {
+        _g = groups.map((v,i) => (i))
+        _g = _g.filter((v,i) => (groups[v].name == online[soc.id].in))
+
+        if (_g.length) {
+            groups[_g[0]].playing = 0
+            soc.emit("setup:game",groups[_g[0]])
+        }
+    })
+
     soc.on("update:user",(u,then) => {
         online[soc.id] = u
         if (then) then()
     })
 
-    soc.on("draw",(i) => {
+    /*soc.on("draw",(i) => {
         arr = []
         _g = groups.map((v,i) => (i))
         _g = _g.filter((v,i) => (groups[i].name == online[soc.id].in))
@@ -353,13 +353,20 @@ io.on("connection", (soc) => {
         groups[_g].playing = (groups[_g].playing + 1) % groups[_g].members.length
         if (disc) groups[_g].last_discard = disc
         io.to(groups[_g].name).emit("setup",groups[_g])
-    })
+    })*/
 
-    soc.on("delete:lastcard",() => {
+    soc.on("draw:card",(i) => {
         _g = groups.map((v,i) => (i))
-        _g = _g.filter((v,i) => (groups[i].name == online[soc.id].in))
-        delete groups[_g].last_discard
-        io.to(groups[_g].name).emit("setup",groups[_g])
+        _g = groups.filter((v,i) => (v.name == online[soc.id].in))
+        
+        if (_g.length) {
+
+            if (i < 0) {
+                online[soc.id].hand.push(_g[0].discard)
+                delete _g[0].discard
+                soc.emit("update:user",online[soc.id])
+            }
+        }
     })
 
     soc.on("disconnect",() => {
@@ -382,7 +389,7 @@ io.on("connection", (soc) => {
     soc.on("echo",(m,arg) => (soc.emit(m,arg)))
 })
 
-const PORT = (process.env.PORT || 8080)
+const PORT = (process.env.PORT || 80)
 
 http.listen(PORT, "::", () => {
     timed_log(`listening on port *: ${PORT}`)

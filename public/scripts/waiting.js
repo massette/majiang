@@ -1,5 +1,5 @@
 soc.on("update:group",(group) => {
-    if (group.members.length >= 4) soc.emit("start:group",group.name)
+    if (group.members.length >= 2) soc.emit("start:group",group.name)
 
     let disp = document.getElementById("waiting")
     while (disp.firstChild) disp.removeChild(disp.firstChild)
@@ -23,7 +23,7 @@ soc.on("update:group",(group) => {
 
     let _start = document.createElement("div")
     _start.className = "small block"
-    if (group.members.length < 4) _start.className = "small block disabled"
+    if (group.members.length < 2) _start.className = "small block disabled"
     else {_start.onclick = () => { soc.emit("start:game",group.name) }}
     _start.innerText = "Start"
     _buttons.appendChild(_start)

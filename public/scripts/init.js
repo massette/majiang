@@ -53,7 +53,7 @@ soc.on("finalize:user",(u) => {
     oldid = localStorage.getItem("id")
 
     localStorage.setItem("id",u.id)
-    if (_page == "game") soc.emit("request:setup")
+    if (_page == "game") soc.emit("update:game")
 
     if (user.name) console.log(`connected as ${user.name}!`)
     else { console.log(`connected as new user!`) }

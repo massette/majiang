@@ -18,8 +18,13 @@ body {
     left: 50%;
     top: 50%;
     transform: translate(-50%,-50%);
-    color: var(--color-light);
+    color: #fd74;
     z-index: -99;
+
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+/Edge */
+    user-select: none; /* Standard */
 }
 #not-found {
     background: var(--color-main);
@@ -250,77 +255,6 @@ button#new-game {
     border-bottom: 1vh solid #fd7;
 }
 
-#discard {
-    text-align: center;
-
-    margin: 0.5vw;
-    padding: calc(1vw - 0.5vh);
-    padding-top: 1vh;
-    padding-bottom: 1vh;
-
-    background: var(--color-bg);
-    color: var(--color-main);
-    border: 0.5vh solid var(--color-main);
-
-    width: calc(2.5em + 1vw);
-}
-
-#selected {
-    text-align: center;
-
-    margin: 0.5vw;
-    padding: calc(1vw - 0.5vh);
-    padding-top: 1vh;
-    padding-bottom: 1vh;
-
-    background: var(--color-bg);
-    color: var(--color-main);
-    border: 0.5vh solid var(--color-main);
-
-    width: calc(50% - 3vw);
-}
-
-#selected.disabled {
-    background: none;
-    color: var(--color-light);
-    border-color: var(--color-light);
-}
-
-#discard.disabled {
-    background: none;
-    color: var(--color-light);
-    border-color: var(--color-light);
-}
-
-#pickup {
-    text-transform: uppercase;
-    margin: 0.5vw;
-    width: calc(20% - 3vw);
-}
-
-#meld {
-    text-transform: uppercase;
-    margin: 0.5vw;
-    width: calc(20% - 3vw);
-}
-
-#discard-tile {
-    text-transform: uppercase;
-    margin: 0.5vw;
-    width: calc(20% - 3vw);
-}
-
-#draw {
-    text-transform: uppercase;
-    margin: 0.5vw;
-    width: calc(20% - 3vw);
-}
-
-#hand {
-    margin-top: 3vh;
-    margin-bottom: 2vh;
-}
-
 .block {
     display: inline-block;
 
@@ -367,14 +301,6 @@ img {
     margin-right: 0.5vh;
 }
 
-#selected img {
-    height: 2em;
-}
-
-#discard img {
-    width: 2.5em;
-}
-
 
 #err {
     display: none;
@@ -390,4 +316,169 @@ img {
     left: 0.8em;
     right: 0.8em;
     bottom: 0.8em;
+}
+
+
+#game {
+    width: calc(100% - 2vh);
+    height: 100%;
+
+    text-align: center;
+
+    margin-top: 1vh;
+    margin-left: 1vh;
+}
+
+#game #draw-buttons {
+    padding-bottom: 1vh;
+    border-bottom: 0.5vh solid var(--color-main);
+    margin-bottom: 2vh;
+}
+
+#game #draw-buttons>div {
+    position: relative;
+
+    background: var(--color-main);
+
+    display: inline-block;
+
+    width: calc(35vw - 2vh);
+    height: calc(3em + 2vh);
+
+    margin: 0.5vh;
+}
+
+#game #draw-buttons img {
+    position: absolute;
+    left: 1vh;
+    top: 1vh;
+    height: 3em;
+}
+
+#game #draw-buttons .label {
+    font-family: "Josefin Sans";
+    font-size: 2vw;
+    font-weight: bold;
+
+    color: var(--color-bg);
+
+    position: absolute;
+    left: calc(3em*(16/23) + 1vw + (100% - 3em*(16/23))/2);
+    top: 50%;
+
+    text-transform: uppercase;
+
+    white-space: nowrap;
+
+    transform: translate(-50%,-50%);
+}
+
+#hand {
+    padding-bottom: 1vh;
+    border-bottom: 0.5vh solid var(--color-main);
+    margin-bottom: 2vh;
+}
+
+#hand #bonus {
+    margin-bottom: 2vh;
+}
+
+#hand>div {
+    background: var(--color-light);
+    margin: 2vh;
+    padding: 2vh;
+    padding-top: 1vh;
+    padding-bottom: 1vh;
+}
+
+#hand img {
+    height: 5vh;
+}
+
+#game-info {
+    color: var(--color-main);
+    font-family: "Josefin Sans";
+    font-size: 3vw;
+    
+    padding-bottom: 1vh;
+    border-bottom: 0.5vh solid var(--color-main);
+    margin-bottom: 4vh;
+}
+
+#game #select-buttons {
+    display: inline-block;
+}
+
+#game #select-buttons #discard, #game #select-buttons #meld {
+    position: relative;
+
+    background: var(--color-main);
+
+    display: inline-block;
+
+    width: calc(35vw - 2vh);
+    height: calc(3em + 2vh);
+
+    margin: 0.5vh;
+}
+
+#game #select-buttons .label {
+    font-family: "Josefin Sans";
+    font-size: 2vw;
+    font-weight: bold;
+
+    color: var(--color-bg);
+
+    position: absolute;
+    left: 50%;
+    top: 50%;
+
+    text-transform: uppercase;
+
+    white-space: nowrap;
+
+    transform: translate(-50%,-50%);
+}
+
+#game #select-buttons #selected {
+    background: var(--color-light);
+    margin: 2vh;
+    padding: 2vh;
+    padding-top: 1vh;
+    padding-bottom: 1vh;
+    text-align: left;
+}
+
+#game #select-buttons #selected img {
+    height: 5vh;
+}
+
+#game #melds {
+    padding-top: 2vh;
+    border-top: 0.5vh solid var(--color-main);
+    margin-top: 1vh;
+}
+
+#game #melds>div {
+    position: relative;
+    background: var(--color-light);
+    margin: 2vh;
+    padding: 2vh;
+    padding-top: 1vh;
+    padding-bottom: 1vh;
+    text-align: left;
+}
+
+#game #melds>div .label {
+    position: absolute;
+    right: 1vh;
+    font-size: 5vh;
+    font-family: "Josefin Sans";
+    font-weight: bold;
+    color: var(--color-bg);
+    text-transform: uppercase;
+}
+
+#game #melds img {
+    height: 5vh;
 }

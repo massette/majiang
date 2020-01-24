@@ -6,20 +6,78 @@ head
 body
     div#head 麻将
 
-    #back-text.
+    #back-text 南
 
     #game
-        #instructions.
-        #discard.block.disabled No discard
-        #draw.block.small.disabled draw
+        #notif.
+        #draw-buttons
+            #pickup.
+            #wall
+                img(src="assets/blank-tile.png")
+                .label draw
 
         #hand
-        #bonus
+            #bonus
+                img(src="assets/blank-bonus.png")
+                img(src="assets/blank-bonus.png")
+                img(src="assets/blank-bonus.png")
+            #normal
+                img(src="assets/blank-tile.png")
+                img(src="assets/blank-tile.png")
+                img(src="assets/blank-tile.png")
+                img(src="assets/blank-tile.png")
+                img(src="assets/blank-tile.png")
+                img(src="assets/blank-tile.png")
+                img(src="assets/blank-tile.png")
+                img(src="assets/blank-tile.png")
+                img(src="assets/blank-tile.png")
+                img(src="assets/blank-tile.png")
+                img(src="assets/blank-tile.png")
+                img(src="assets/blank-tile.png")
+                img(src="assets/blank-tile.png")
+        
+        #game-info
+            | You wind position is: <b>南</b><br/>
+            | waiting for <b>jaune (西)</b> to play...
 
-        #selected.block.disabled Nothing selected
-        #meld.block.small.disabled meld
-        #discard-tile.block.small.disabled discard
+        #select-buttons
+            #discard
+                .label discard
+            #meld 
+                .label meld
+            #selected
+                img(src="assets/blank-tile.png")
+                img(src="assets/blank-tile.png")
+                img(src="assets/blank-tile.png")
+                img(src="assets/blank-tile.png")
+                img(src="assets/blank-tile.png")
+                img(src="assets/blank-tile.png")
+                img(src="assets/blank-tile.png")
+                img(src="assets/blank-tile.png")
+                img(src="assets/blank-tile.png")
+                img(src="assets/blank-tile.png")
+        
         #melds
+            .meld
+                .label eyes
+                img(src="assets/blank-tile.png")
+                img(src="assets/blank-tile.png")
+            .meld
+                .label pong
+                img(src="assets/blank-tile.png")
+                img(src="assets/blank-tile.png")
+                img(src="assets/blank-tile.png")
+            .meld
+                .label kong
+                img(src="assets/blank-tile.png")
+                img(src="assets/blank-tile.png")
+                img(src="assets/blank-tile.png")
+                img(src="assets/blank-tile.png")
+            .meld
+                .label chow
+                img(src="assets/blank-tile.png")
+                img(src="assets/blank-tile.png")
+                img(src="assets/blank-tile.png")
 
     script(src="/socket.io/socket.io.js")
     

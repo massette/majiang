@@ -1,4 +1,4 @@
-bonuses = document.getElementById("bonus")
+/*bonuses = document.getElementById("bonus")
 tiles = document.getElementById("hand")
 
 selected = []
@@ -90,7 +90,63 @@ const check_turns = (g) => {
         _draw.onclick = null
     }
 }
+*/
 
+soc.on("setup:game",(g) => {
+    if (!user.hand) soc.emit("draw:card",13)
+    else { tiles() }
+
+    _u = g.members.map((v,i) => (i))
+    _u = _u.filter((v,i) => (g.members[i].id == soc.id))
+
+    let ch = ""
+
+    if (_u.length) {
+        _u = _u[0]
+        ch = CHINESE[(_u + 1) + "d"]
+    }
+
+    document.getElementById("back-text").innerText = ch
+
+    _discard = document.getElementById("pickup")
+
+    while (_discard.firstChild) _discard.removeChild(_discard.firstChild)
+
+    if (g.discard) {
+        _discard.className = ""
+        
+        _tile = new Image()
+        _tile.src = `assets/${g.discard}-tile.png`
+        _tile.onclick = () => {
+            soc.emit("draw:card",-1)
+        }
+        _discard.appendChild(_tile)
+
+        _label = document.createElement("div")
+        _label.className = "label"
+        _label.innerText = "Steal Discard"
+        _discard.appendChild(_label)
+
+    } else {
+        _discard.className = "disabled"
+        
+        _tile = new Image()
+        _tile.src = `assets/empty-tile.png`
+        _tile.onclick = () => {
+            if (user.drawing) {
+                soc.emit("draw:card",-1)
+            }
+        }
+        _discard.appendChild(_tile)
+
+        _label = document.createElement("div")
+        _label.className = "label"
+        _label.innerText = "No discard..."
+        _discard.appendChild(_label)
+    }
+})
+
+/*
 soc.on("setup",(g) => {
     if (!user.hand) soc.emit("draw",13)
     else { update_tiles() }
@@ -107,7 +163,8 @@ soc.on("setup",(g) => {
     }
 
     document.getElementById("back-text").innerText = ch
-    
+    --
+
     _disc = document.getElementById("discard")
     while (_disc.firstChild) _disc.removeChild(_disc.firstChild)
 
@@ -138,4 +195,4 @@ soc.on("add:cards",(tiles) => {
 
     update_tiles()
     soc.emit("update:user",user)
-})
+})*/
